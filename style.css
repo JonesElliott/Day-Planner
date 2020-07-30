@@ -33,13 +33,21 @@ textarea{
 .row {
   white-space: pre-wrap;
   height: 80px;
-  border-top: 1px solid white;;
+  border-top: 1px solid white;
 }
 
 .hour {
   background-color: #ffffff;
   color: #000000;
   border-top: 1px dashed #000000;
+}
+
+.planner-input {
+  text-decoration-color: #000000;
+  background: transparent;
+  border: ;
+  height: 100%;
+  width: 100%;
 }
 
 .past {
@@ -68,4 +76,9 @@ textarea{
 .saveBtn i:hover {
   font-size: 20px;
   transition: all .3s ease-in-out;
+}
+
+.saveImg {
+  height: 30px;
+  width: 30px;
 }
