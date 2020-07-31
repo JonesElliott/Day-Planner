@@ -8,4 +8,5 @@ $(document).ready(function () {
     // Using setInterval() and moment() in the updateTime() function the time is being updated in real time (Hehehe)
      setInterval(updateTime, 1000);
      updateTime();
+
 });
