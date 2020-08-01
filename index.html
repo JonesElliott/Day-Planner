@@ -43,7 +43,7 @@
     <!-- <script src="./script.js"></script> -->
     <script>
       $(document).ready(function () {
-        // Function to get the current time using moment()
+        // Get the current time using moment()
         function updateTime() {
           const timeNow = moment().format("dddd, MMMM Do YYYY, h:mm:ss a");
           $('#currentDay').text(timeNow);
@@ -51,6 +51,31 @@
         // Using setInterval() and moment() in the updateTime() function the time is being updated in real time. It's mostly just a big ball of wibbly wobbly, timey wimey stuff.
         setInterval(updateTime, 1000);
         updateTime();
+        
+        var savedEvents = {
+          timeSlot: [],
+          event: []
+        }
+
+        init();
+
+        // Get locally stored events
+        function init() {
+          var eventTimeSlot = JSON.parse(localStorage.getItem("savedEvents.timeSlot"));
+          var storedEvent = JSON.parse(localStorage.getItem("savedEvents.event"));
+          if (eventTimeSlot !== null) {
+            savedEvents.timeSlot = eventTimeSlot;
+          }
+          if (storedEvent !== null) {
+            savedEvents.event = storedEvent;
+          }
+        }
+
+        // Save events to local storage
+        function saveUserEvents() {
+          localStorage.setItem("savedEvents.timeSlot", JSON.stringify(savedEvents.timeSlot));
+          localStorage.setItem("savedEvents.event", JSON.stringify(savedEvents.event));
+        }
         
         // General variables
         var dayHours = 24;
@@ -83,11 +108,17 @@
           const rowDiv = $('<div>').attr('class', 'row').appendTo($('.timeContainer'));
           const hourDiv = $('<div>').attr('class', 'col-md-1 hour').text(timeChart + amPM).appendTo(rowDiv);
           var planInput = $('<input>').attr('type', 'text').attr('id', timeIndex).attr('class', 'col-md-10 planner-input').appendTo(rowDiv);
-          const saveButton = $('<button>').attr('class', 'col-md-1 saveBtn').appendTo(rowDiv);
-          const saveImg = $('<img>').attr('src', './Assets/save-icon-alpha.png').attr('alt', 'Floppy Disk Outlinve Save Icon').attr('class', 'saveImg').appendTo(saveButton);
+          const saveButton = $('<button>').attr('class', 'col-md-1 far fa-save saveBtn').appendTo(rowDiv);
         }
 
-        // Function to update the background based on the current time
+        $('button').on('click', function(event) {
+          console.log("Button Clicked");
+          var element = event.target;
+          var plannerText = element.parentElement.firstChild.nextSibling;
+          console.log(plannerText);
+        });
+
+        // Update the background based on the current time
         function updateTimeBackground() {
           const currentHour = moment().format("H");
           
@@ -96,7 +127,7 @@
             var timeID = $('#' + i).attr('id');
 
             var newTimeID;
-            // Sets the formating of 
+            // Sets the formating of newTimeID variable to match currentHour variable
             if (timeID < 10) {
               newTimeID = "0" + timeID;
             } else {
@@ -116,6 +147,9 @@
         
         setInterval(updateTimeBackground, 1000);
         updateTimeBackground();
+
+
+
       });
     </script>
   </body>
