@@ -159,29 +159,31 @@
         // Update the background based on the current time
         function updateTimeBackground() {
           const currentHour = moment().format("H");
+          //console.log(currentHour);
           
           for (let i = 1; i < (dayHours + 1); i++) {
             // Gets the current input field based on id
             var timeID = $('#' + i).attr('id');
 
-            var newTimeID;
+            // var newTimeID;
             // Sets the formating of newTimeID variable to match currentHour variable
-            if (timeID < 10) {
-              newTimeID = "0" + timeID;
-            } else {
-              newTimeID = timeID;
-            }
+            // if (timeID < 10) {
+            //   newTimeID = "0" + timeID;
+            // } else {
+            //   newTimeID = timeID;
+            // }
+            // newTimeID = timeID;
 
             // Adds past, present, or future class based on the relation to the current time
-            if (currentHour < 1) {
-              $('#' + 24).addClass('present');
-              $('#' + timeID).addClass('past');
-            } else if (currentHour === newTimeID) {
-              $('#' + timeID).addClass('present');
-            } else if (currentHour < newTimeID) {
-              $('#' + timeID).addClass('future');
-            } else {
-              $('#' + timeID).addClass('past');
+            if (currentHour === timeID) {
+              $("#" + timeID).addClass("present");
+              //$("#" + timeID).val("Present");
+            } else if (currentHour < timeID) {
+              $("#" + timeID).addClass("future");
+              //$("#" + timeID).val("Future");
+            } else if (currentHour > timeID) {
+              $("#" + timeID).addClass("past");
+              //$("#" + timeID).val("past");
             }
           }
         }
