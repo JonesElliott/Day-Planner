@@ -27,6 +27,11 @@
       <h1 class="display-3">Work Day Scheduler</h1>
       <p class="lead">A simple calendar app for scheduling your work day</p>
       <p id="currentDay" class="lead"></p>
+      <div class="float-left">
+        <p class="">Time Format</p>
+        <button class="hourBtn" id="hour-12">12 Hours</button>
+        <button class="hourBtn" id="hour-24">24 Hours</button>
+      </div>
     </header>
     <div class="container mt-5 mb-5 timeContainer">
       <!-- Timeblocks go here -->
@@ -53,19 +58,19 @@
         updateTime();
         
         var savedEvents = {
-          timeSlot: [],
+          timeSlot: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24],
           event: []
         }
 
-        init();
+        
 
         // Get locally stored events
         function init() {
-          var eventTimeSlot = JSON.parse(localStorage.getItem("savedEvents.timeSlot"));
+          //var eventTimeSlot = JSON.parse(localStorage.getItem("savedEvents.timeSlot"));
           var storedEvent = JSON.parse(localStorage.getItem("savedEvents.event"));
-          if (eventTimeSlot !== null) {
-            savedEvents.timeSlot = eventTimeSlot;
-          }
+          // if (eventTimeSlot !== null) {
+          //   savedEvents.timeSlot = eventTimeSlot;
+          // }
           if (storedEvent !== null) {
             savedEvents.event = storedEvent;
           }
@@ -73,9 +78,16 @@
 
         // Save events to local storage
         function saveUserEvents() {
-          localStorage.setItem("savedEvents.timeSlot", JSON.stringify(savedEvents.timeSlot));
+          //localStorage.setItem("savedEvents.timeSlot", JSON.stringify(savedEvents.timeSlot));
           localStorage.setItem("savedEvents.event", JSON.stringify(savedEvents.event));
         }
+
+        function executeOrder66() {
+          $('.timeContainer').html("");
+          dayHours = 24;
+          timeChart = 0;
+          timeIndex = 0;
+        };
         
         // General variables
         var dayHours = 24;
@@ -83,39 +95,60 @@
         var timeIndex = 0;
         var isTwelveHourFormat = true;
 
-        for (let i = 0; i < dayHours; i++) {
-
-          // If set to 12 format this helps format the time block divs
-          if (isTwelveHourFormat) {
-            if (timeChart > 11) {
-              timeChart = 0;
+        function updateTimeBlocks() {
+          for (let i = 0; i < dayHours; i++) {
+            // If set to 12 format this helps format the time block divs
+            if (isTwelveHourFormat) {
+              if (timeChart > 11) {
+                timeChart = 0;
+              }
             }
+
+            // Writes AM or PM to the time block in the appropriate plce
+            let amPM = "";
+            if (timeIndex < 11 || timeIndex > 22) {
+              amPM = "AM";
+            } else {
+              amPM = "PM";
+            }
+
+
+            timeIndex = timeIndex + 1;
+            timeChart = timeChart + 1;
+
+            // Writing the time block elements
+            const rowDiv = $('<div>').attr('class', 'row').appendTo($('.timeContainer'));
+            const hourDiv = $('<div>').attr('class', 'col-md-1 hour').text(timeChart + amPM).appendTo(rowDiv);
+            var planInput = $('<input>').attr('type', 'text').attr('id', timeIndex).attr('class', 'col-md-10 planner-input').text(savedEvents.event[timeIndex]).appendTo(rowDiv);
+            const saveButton = $('<button>').attr('class', 'col-md-1 far fa-save saveBtn').appendTo(rowDiv);
           }
-
-          // Writes AM or PM to the time block in the appropriate plce
-          let amPM = "";
-          if (timeIndex < 11 || timeIndex > 22) {
-            amPM = "AM";
-          } else {
-            amPM = "PM";
-          }
-
-
-          timeIndex = timeIndex + 1;
-          timeChart = timeChart + 1;
-          
-          // Writing the time block elements
-          const rowDiv = $('<div>').attr('class', 'row').appendTo($('.timeContainer'));
-          const hourDiv = $('<div>').attr('class', 'col-md-1 hour').text(timeChart + amPM).appendTo(rowDiv);
-          var planInput = $('<input>').attr('type', 'text').attr('id', timeIndex).attr('class', 'col-md-10 planner-input').appendTo(rowDiv);
-          const saveButton = $('<button>').attr('class', 'col-md-1 far fa-save saveBtn').appendTo(rowDiv);
         }
 
-        $('button').on('click', function(event) {
-          console.log("Button Clicked");
+        $('#hour-12').on('click', function(){
+          isTwelveHourFormat = true;
+          executeOrder66();
+          updateTimeBlocks();
+          console.log(isTwelveHourFormat);
+        });
+        $('#hour-24').on('click', function(){
+          isTwelveHourFormat = false;
+          executeOrder66();
+          updateTimeBlocks();
+          console.log(isTwelveHourFormat);
+        });
+
+        // Event listener for each save button
+        $('.saveBtn').on('click', function(event) {
           var element = event.target;
-          var plannerText = element.parentElement.firstChild.nextSibling;
-          console.log(plannerText);
+          var inputElement = element.parentElement.firstChild.nextSibling;
+          var plannerText = inputElement.value.trim();
+          var plannerHour = inputElement.getAttribute('id');
+
+          
+
+          console.log(inputElement);
+          console.log("Planner Hour/ID: " + plannerHour);
+          console.log("Planner Text: " + plannerText);
         });
 
         // Update the background based on the current time
@@ -135,7 +168,10 @@
             }
 
             // Adds past, present, or future class based on the relation to the current time
-            if (currentHour === newTimeID) {
+            if (currentHour < 1) {
+              $('#' + 24).addClass('present');
+              $('#' + timeID).addClass('past');
+            } else if (currentHour === newTimeID) {
               $('#' + timeID).addClass('present');
             } else if (currentHour < newTimeID) {
               $('#' + timeID).addClass('future');
@@ -147,6 +183,9 @@
         
         setInterval(updateTimeBackground, 1000);
         updateTimeBackground();
+
+        init();
+        updateTimeBlocks();
 
 
 
