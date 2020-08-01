@@ -2,6 +2,7 @@ body {
   font-family: 'Open Sans', sans-serif;
   font-size: 16px;
   line-height: 1;
+  background-color: powderblue;
 }
 
 textarea{
@@ -19,6 +20,8 @@ textarea{
   color: black;
   border-radius: 0;
   border-bottom: 10px solid black;
+  background-image: url(./Assets/city-blue.jpg);
+  background-size: contain;
 }
 
 .description{
@@ -33,11 +36,14 @@ textarea{
 .row {
   white-space: pre-wrap;
   height: 80px;
-  border-top: 1px solid white;
+  /* border-top: 1px; */
+  margin-top: 5px;
+  background-color: powderblue;
 }
 
 .hour {
-  background-color: #ffffff;
+  /* background-color: #ffffff; */
+  background-color: powderblue;
   color: #000000;
   border-top: 1px dashed #000000;
 }
@@ -84,4 +90,11 @@ textarea{
   background-color: #06AED5;
   color: white;
   font-size: 20px;
+}
+
+@media only screen and (max-width: 800px) {
+  .jumbotron {
+    background-image: none;
+    background-color: deepskyblue;
+  }
 }
