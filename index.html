@@ -158,12 +158,12 @@
 
         // Update the background based on the current time
         function updateTimeBackground() {
-          const currentHour = moment().format("H");
           //console.log(currentHour);
           
           for (let i = 1; i < (dayHours + 1); i++) {
+            var currentHour = parseInt(moment().format("H"));
             // Gets the current input field based on id
-            var timeID = $('#' + i).attr('id');
+            var timeID = parseInt($('#' + i).attr('id'));
 
             // var newTimeID;
             // Sets the formating of newTimeID variable to match currentHour variable
@@ -172,7 +172,7 @@
             // } else {
             //   newTimeID = timeID;
             // }
-            // newTimeID = timeID;
+            newTimeID = timeID;
 
             // Adds past, present, or future class based on the relation to the current time
             if (currentHour === timeID) {
