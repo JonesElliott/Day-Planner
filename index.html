@@ -48,9 +48,14 @@
     <!-- <script src="./script.js"></script> -->
     <script>
       $(document).ready(function () {
-        // Get the current time using moment()
-        function updateTime() {
-          const timeNow = moment().format("dddd, MMMM Do YYYY, h:mm:ss a");
+         // Get the current time using moment()
+         function updateTime() {
+          var timeNow = moment().format("dddd, MMMM Do YYYY, h:mm:ss a");
+          
+          if (!isTwelveHourFormat) {
+            timeNow = moment().format("dddd, MMMM Do YYYY, HH:mm:ss a");
+          }
+
           $('#currentDay').text(timeNow);
         }
         // Using setInterval() and moment() in the updateTime() function the time is being updated in real time. It's mostly just a big ball of wibbly wobbly, timey wimey stuff.
@@ -58,7 +63,7 @@
         updateTime();
         
         var savedEvents = {
-          timeSlot: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24],
+          timeSlot: [],
           event: []
         }
 
@@ -186,8 +191,6 @@
 
         init();
         updateTimeBlocks();
-
-
 
       });
     </script>
