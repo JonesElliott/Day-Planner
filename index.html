@@ -30,12 +30,13 @@
     </header>
     <div class="container mt-5 mb-5 timeContainer">
       <!-- Timeblocks go here -->
+
       <!-- <div class="row">
-        <div class="col-md-1 hour">6AM</div>
-        <input type="text" name="" id="plannerIndex0" time-index="6" class="col-md-10 planner-input row">
-        <button class="col-md-1 saveBtn"><img src="./Assets/save-icon-alpha.png" alt="Floppy Disk Outlinve Save Icon" class="saveImg"></button>
+        <div class="col-md-1 hour">8AM</div>
+        <input type="text" name="" id="plannerIndex0" time-index="6" class="col-md-10 row">
+        <button class="col-md-1 saveBtn"><img src="./Assets/save-icon-alpha.png" alt="Floppy Disk Outline Save Icon" class="saveImg"></button>
       </div> -->
-      
+
     </div>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
@@ -47,48 +48,74 @@
           const timeNow = moment().format("dddd, MMMM Do YYYY, h:mm:ss a");
           $('#currentDay').text(timeNow);
         }
-        // Using setInterval() and moment() in the updateTime() function the time is being updated in real time (Hehehe)
+        // Using setInterval() and moment() in the updateTime() function the time is being updated in real time. It's mostly just a big ball of wibbly wobbly, timey wimey stuff.
         setInterval(updateTime, 1000);
         updateTime();
-
-        let m = moment().format("H");
-        console.log(m);
-
         
-        
-        //console.log($('.hour').attr('timeIndex'));
-
-        // const elTimeIndex = $('.hour').attr('timeIndex');
+        // General variables
         var dayHours = 24;
         var timeChart = 0;
+        var timeIndex = 0;
+        var isTwelveHourFormat = true;
 
         for (let i = 0; i < dayHours; i++) {
+
+          // If set to 12 format this helps format the time block divs
+          if (isTwelveHourFormat) {
+            if (timeChart > 11) {
+              timeChart = 0;
+            }
+          }
+
+          // Writes AM or PM to the time block in the appropriate plce
+          let amPM = "";
+          if (timeIndex < 11 || timeIndex > 22) {
+            amPM = "AM";
+          } else {
+            amPM = "PM";
+          }
+
+
+          timeIndex = timeIndex + 1;
           timeChart = timeChart + 1;
-          console.log(timeChart);
           
+          // Writing the time block elements
           const rowDiv = $('<div>').attr('class', 'row').appendTo($('.timeContainer'));
-          const hourDiv = $('<div>').attr('class', 'col-md-1 hour').text(timeChart).appendTo(rowDiv);
-          var planInput = $('<input>').attr('type', 'text').attr('hourIndex', timeChart).attr('class', 'col-md-10 planner-input row').appendTo(rowDiv);
+          const hourDiv = $('<div>').attr('class', 'col-md-1 hour').text(timeChart + amPM).appendTo(rowDiv);
+          var planInput = $('<input>').attr('type', 'text').attr('id', timeIndex).attr('class', 'col-md-10 planner-input').appendTo(rowDiv);
           const saveButton = $('<button>').attr('class', 'col-md-1 saveBtn').appendTo(rowDiv);
           const saveImg = $('<img>').attr('src', './Assets/save-icon-alpha.png').attr('alt', 'Floppy Disk Outlinve Save Icon').attr('class', 'saveImg').appendTo(saveButton);
         }
 
+        // Function to update the background based on the current time
+        function updateTimeBackground() {
+          const currentHour = moment().format("H");
+          
+          for (let i = 1; i < (dayHours + 1); i++) {
+            // Gets the current input field based on id
+            var timeID = $('#' + i).attr('id');
+
+            var newTimeID;
+            // Sets the formating of 
+            if (timeID < 10) {
+              newTimeID = "0" + timeID;
+            } else {
+              newTimeID = timeID;
+            }
+
+            // Adds past, present, or future class based on the relation to the current time
+            if (currentHour === newTimeID) {
+              $('#' + timeID).addClass('present');
+            } else if (currentHour < newTimeID) {
+              $('#' + timeID).addClass('future');
+            } else {
+              $('#' + timeID).addClass('past');
+            }
+          }
+        }
         
-
-
-        // if (planInput.timeChart === m) {
-        //   planInput.attr('class', 'present')
-        // } else {
-        //   console.log('Errrrrr');
-        // }
-        
-
-        // if ($('.hour').attr('timeIndex') === m) {
-        //   console.log("It's A Match: Index: " + elTimeIndex + " Hour: " + m)
-        //   $('#plannerIndex0').attr('class', 'col-md-10 planner-input row present');
-        // } else {
-        //   console.log("It's NOT A Match: Index: " + elTimeIndex + " Hour: " + m)
-        // }
+        setInterval(updateTimeBackground, 1000);
+        updateTimeBackground();
       });
     </script>
   </body>
