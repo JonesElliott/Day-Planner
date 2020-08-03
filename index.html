@@ -63,28 +63,22 @@
         updateTime();
         
         var savedEvents = {
-          timeSlot: [],
-          event: []
-        }
+          userEvent: ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""]
+        };
 
-        
+        init();
 
         // Get locally stored events
         function init() {
-          //var eventTimeSlot = JSON.parse(localStorage.getItem("savedEvents.timeSlot"));
-          var storedEvent = JSON.parse(localStorage.getItem("savedEvents.event"));
-          // if (eventTimeSlot !== null) {
-          //   savedEvents.timeSlot = eventTimeSlot;
-          // }
+          var storedEvent = JSON.parse(localStorage.getItem("savedEvents.userEvent"));
           if (storedEvent !== null) {
-            savedEvents.event = storedEvent;
+            savedEvents.userEvent = storedEvent;
           }
         }
 
         // Save events to local storage
         function saveUserEvents() {
-          //localStorage.setItem("savedEvents.timeSlot", JSON.stringify(savedEvents.timeSlot));
-          localStorage.setItem("savedEvents.event", JSON.stringify(savedEvents.event));
+          localStorage.setItem("savedEvents.event", JSON.stringify(savedEvents.userEvent));
         }
 
         function executeOrder66() {
@@ -117,18 +111,27 @@
               amPM = "PM";
             }
 
-
             timeIndex = timeIndex + 1;
             timeChart = timeChart + 1;
 
             // Writing the time block elements
             const rowDiv = $('<div>').attr('class', 'row').appendTo($('.timeContainer'));
             const hourDiv = $('<div>').attr('class', 'col-md-1 hour').text(timeChart + amPM).appendTo(rowDiv);
-            var planInput = $('<input>').attr('type', 'text').attr('id', timeIndex).attr('class', 'col-md-10 planner-input').text(savedEvents.event[timeIndex]).appendTo(rowDiv);
+            var planInput = $('<input>').attr('type', 'text').attr('id', timeIndex).attr('class', 'col-md-10 planner-input').appendTo(rowDiv);
             const saveButton = $('<button>').attr('class', 'col-md-1 far fa-save saveBtn').appendTo(rowDiv);
           }
         }
 
+        function writeSavedEvents() {
+          for (let i = 0; i < savedEvents.userEvent.length; i++) {
+            const currentInputEl = $('#' + (i + 1));
+            const currentInputValue = savedEvents.userEvent[i];
+            currentInputEl.val(currentInputValue);
+          }
+        }
+        
+
+        // Buttons to change between 12 & 24 hour format
         $('#hour-12').on('click', function(){
           isTwelveHourFormat = true;
           executeOrder66();
@@ -141,21 +144,7 @@
           updateTimeBlocks();
           console.log(isTwelveHourFormat);
         });
-
-        // Event listener for each save button
-        $('.saveBtn').on('click', function(event) {
-          var element = event.target;
-          var inputElement = element.parentElement.firstChild.nextSibling;
-          var plannerText = inputElement.value.trim();
-          var plannerHour = inputElement.getAttribute('id');
-
-          
-
-          console.log(inputElement);
-          console.log("Planner Hour/ID: " + plannerHour);
-          console.log("Planner Text: " + plannerText);
-        });
-
+        
         // Update the background based on the current time
         function updateTimeBackground() {
           //console.log(currentHour);
@@ -165,13 +154,6 @@
             // Gets the current input field based on id
             var timeID = parseInt($('#' + i).attr('id'));
 
-            // var newTimeID;
-            // Sets the formating of newTimeID variable to match currentHour variable
-            // if (timeID < 10) {
-            //   newTimeID = "0" + timeID;
-            // } else {
-            //   newTimeID = timeID;
-            // }
             newTimeID = timeID;
 
             // Adds past, present, or future class based on the relation to the current time
@@ -191,10 +173,26 @@
         setInterval(updateTimeBackground, 1000);
         updateTimeBackground();
 
-        init();
         updateTimeBlocks();
 
+        $('.saveBtn').on('click', function(event) {
+          //event.stopPropagation();
+          console.log("Clicked");
+          var element = event.target;
+          var inputElement = element.parentElement.firstChild.nextSibling;
+          var plannerIndex = inputElement.getAttribute('id');
+          var plannerText = inputElement.value;
+
+          savedEvents.userEvent[plannerIndex - 1] = plannerText;
+          saveUserEvents();
+          
+          console.log(inputElement);
+          console.log("Planner Hour/ID: " + plannerIndex);
+          console.log("Planner Text: " + plannerText);
+        });
+
       });
+      writeSavedEvents();
     </script>
   </body>
 </html>
