@@ -2,8 +2,20 @@
 A day planner built with jQuery that allows users to add and edit events which are stored locally
 
 ## About
+This is day planner is built using jQuery and utilizing moment.js to update the page based on the current date/time. User's can type events into each time slot and save them. These events are stored locally and allows the user to return while using the same device and see the stored events.
 
 ## Usuage
+At the top of the page the current day, date, and time is displayed with moment.js and is updated in real time utilizing the ```setInterval()``` function.
+
+![Page Title Real Time Update](./Assets/time-update.PNG)
+
+To the left of the title is a 12 and 24 hour time format option. These buttons adjust the formatting of the live udated time at the top of the page and also the timeblocks. A darker blue denotes the selected time format.
+
+![Time Format buttons](./Assets/time-format.PNG)
+
+There are 24 time blocks, one for each hour of the day, these are color coded to denote time blocks that have passed, the current time block, and future time blocks. Past are colored gray, current red, and future green. The user can click inside the colored input field to add and edit events. These events can be saved and stored locally by clicking the save button to the right of the time block.
+
+![Time Block Past Present Future Save Button](./Assets/timeblock-1.PNG)
 
 ## Credits
 
