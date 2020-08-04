@@ -62,23 +62,22 @@
         setInterval(updateTime, 1000);
         updateTime();
         
-        var savedEvents = {
-          userEvent: ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""]
-        };
+        var timeBlockIDArray = [$('#div1'), $('#div2'), $('#div3'), $('#div4'), $('#div5'), $('#div6'), $('#div7'), $('#div8'), $('#div9'), $('#div10'), $('#div11'), $('#div12'), $('#div13'), $('#14'), $('#15'), $('#16'), $('#17'), $('#18'), $('#19'), $('#20'), $('#21'), $('#22'), $('#23'), $('#24')];
+        var savedEvents = ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""];
 
         init();
 
         // Get locally stored events
         function init() {
-          var storedEvent = JSON.parse(localStorage.getItem("savedEvents.userEvent"));
+          var storedEvent = JSON.parse(localStorage.getItem("savedEvents"));
           if (storedEvent !== null) {
-            savedEvents.userEvent = storedEvent;
+            savedEvents = storedEvent;
           }
         }
 
         // Save events to local storage
         function saveUserEvents() {
-          localStorage.setItem("savedEvents.event", JSON.stringify(savedEvents.userEvent));
+          localStorage.setItem("savedEvents", JSON.stringify(savedEvents));
         }
 
         function executeOrder66() {
@@ -114,22 +113,18 @@
             timeIndex = timeIndex + 1;
             timeChart = timeChart + 1;
 
+            var savedText = savedEvents[i];
+
             // Writing the time block elements
             const rowDiv = $('<div>').attr('class', 'row').appendTo($('.timeContainer'));
-            const hourDiv = $('<div>').attr('class', 'col-md-1 hour').text(timeChart + amPM).appendTo(rowDiv);
-            var planInput = $('<input>').attr('type', 'text').attr('id', timeIndex).attr('class', 'col-md-10 planner-input').appendTo(rowDiv);
-            const saveButton = $('<button>').attr('class', 'col-md-1 far fa-save saveBtn').appendTo(rowDiv);
+            const hourRowDiv = $('<div>').attr('class', 'col-md-1').appendTo(rowDiv);
+            const hourDiv = $('<div>').attr('class', 'hour').text(timeChart + amPM).appendTo(hourRowDiv);
+            const inputRowDiv = $('<div>').attr('id', "div" + timeIndex).attr('class', 'col-md-10 input-div').appendTo(rowDiv);
+            var planInput = $('<input>').attr('type', 'text').attr('id', timeIndex).attr('class', 'planner-input').val(savedText).appendTo(inputRowDiv);
+            const buttonRowDiv = $('<div>').attr('class', 'col-md-1 row').appendTo(rowDiv);
+            const saveButton = $('<button>').attr('class', 'far fa-save saveBtn').appendTo(buttonRowDiv);
           }
         }
-
-        function writeSavedEvents() {
-          for (let i = 0; i < savedEvents.userEvent.length; i++) {
-            const currentInputEl = $('#' + (i + 1));
-            const currentInputValue = savedEvents.userEvent[i];
-            currentInputEl.val(currentInputValue);
-          }
-        }
-        
 
         // Buttons to change between 12 & 24 hour format
         $('#hour-12').on('click', function(){
@@ -154,8 +149,6 @@
             // Gets the current input field based on id
             var timeID = parseInt($('#' + i).attr('id'));
 
-            newTimeID = timeID;
-
             // Adds past, present, or future class based on the relation to the current time
             if (currentHour === timeID) {
               $("#" + timeID).addClass("present");
@@ -176,23 +169,16 @@
         updateTimeBlocks();
 
         $('.saveBtn').on('click', function(event) {
-          //event.stopPropagation();
-          console.log("Clicked");
           var element = event.target;
-          var inputElement = element.parentElement.firstChild.nextSibling;
+          var inputElement = element.parentElement.previousElementSibling.firstChild;
           var plannerIndex = inputElement.getAttribute('id');
           var plannerText = inputElement.value;
 
-          savedEvents.userEvent[plannerIndex - 1] = plannerText;
+          savedEvents[plannerIndex - 1] = plannerText;
           saveUserEvents();
-          
-          console.log(inputElement);
-          console.log("Planner Hour/ID: " + plannerIndex);
-          console.log("Planner Text: " + plannerText);
         });
-
       });
-      writeSavedEvents();
+      
     </script>
   </body>
 </html>
