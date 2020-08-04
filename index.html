@@ -29,7 +29,7 @@
       <p id="currentDay" class="lead"></p>
       <div class="float-left">
         <p class="">Time Format</p>
-        <button class="hourBtn" id="hour-12">12 Hours</button>
+        <button class="hourBtn hour-selected" id="hour-12">12 Hours</button>
         <button class="hourBtn" id="hour-24">24 Hours</button>
       </div>
     </header>
@@ -133,14 +133,18 @@
         // Buttons to change between 12 & 24 hour format
         $('#hour-12').on('click', function(){
           isTwelveHourFormat = true;
+          $('#hour-24').removeClass('hour-selected');
           executeOrder66();
           updateTimeBlocks();
+          $(this).addClass('hour-selected');
           console.log(isTwelveHourFormat);
         });
         $('#hour-24').on('click', function(){
+          $('#hour-12').removeClass('hour-selected');
           isTwelveHourFormat = false;
           executeOrder66();
           updateTimeBlocks();
+          $(this).addClass('hour-selected');
           console.log(isTwelveHourFormat);
         });
         
