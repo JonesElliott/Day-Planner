@@ -1,5 +1,5 @@
-# Day-Planner
-A day planner built with jQuery that allows users to add and edit events which are stored locally
+# Day Planner
+[Deployed Site](https://joneselliott.github.io/Day-Planner/)
 
 ## About
 This is day planner is built using jQuery and utilizing moment.js to update the page based on the current date/time. User's can type events into each time slot and save them. These events are stored locally and allows the user to return while using the same device and see the stored events.
